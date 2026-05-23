@@ -1,0 +1,12 @@
+Create a VPC (10.4.0.0/16)
+Create an Internet Gateway and attach to VPC
+Create few Subnets (10.4.1.0/24, 10.4.2.0/24 etc)
+Create route tables and associate Subnets
+create security group (FW) for ssh and http
+Create EC2 instance associating with the  VPC / add bash script to start webserver (google user data for web server startup in ec2 instance)
+
+
+IAM Role Policies:
+-> AWS Manage Policy
+-> Custom Policy
+-> Inline Policy
