@@ -2,11 +2,12 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Enterprise VPC with Public, Private, and Isolated subnets.'
 
 Parameters:
+
   VpcName:
     Type: String
     Default: 'VPC-Anji'
     Description: 'Name of the VPC'
-  
+
   VpcCidr:
     Type: String
     Default: '10.0.0.0/16'
@@ -43,7 +44,8 @@ Parameters:
     Description: 'CIDR block for the Isolated Subnet'
 
 Resources:
-  # VPC
+
+  # ── VPC ──────────────────────────────────────────────────────────────────────
   VPC:
     Type: 'AWS::EC2::VPC'
     Properties:
@@ -54,7 +56,7 @@ Resources:
         - Key: Name
           Value: !Ref VpcName
 
-  # Internet Gateway
+  # ── Internet Gateway ─────────────────────────────────────────────────────────
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -68,7 +70,7 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
-  # Subnets
+  # ── Subnets ──────────────────────────────────────────────────────────────────
   PublicSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -102,7 +104,7 @@ Resources:
         - Key: Name
           Value: !Ref IsolatedSubnetName
 
-  # Route Tables
+  # ── Route Tables ─────────────────────────────────────────────────────────────
   PublicRouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -127,15 +129,16 @@ Resources:
         - Key: Name
           Value: !Sub '${IsolatedSubnetName}-RT'
 
-  # Routes
+  # ── Routes ───────────────────────────────────────────────────────────────────
   PublicRoute:
     Type: 'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
     Properties:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId: !Ref InternetGateway
 
-  # Route Table Associations
+  # ── Route Table Associations ─────────────────────────────────────────────────
   PublicSubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -155,15 +158,19 @@ Resources:
       RouteTableId: !Ref IsolatedRouteTable
 
 Outputs:
+
   VpcId:
     Description: 'The ID of the VPC'
     Value: !Ref VPC
+
   PublicSubnetId:
     Description: 'The ID of the Public Subnet'
     Value: !Ref PublicSubnet
+
   PrivateSubnetId:
     Description: 'The ID of the Private Subnet'
     Value: !Ref PrivateSubnet
+
   IsolatedSubnetId:
     Description: 'The ID of the Isolated Subnet'
     Value: !Ref IsolatedSubnet
