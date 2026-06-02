@@ -1,2 +1,2 @@
-The resources created as part of enterprise-vpc.yaml doesn't cost a time. 
+The resources created as part of enterprise-vpc.yaml doesn't cost a dime. 
 NAT gateway does. This is not created as part of the yaml stack.
